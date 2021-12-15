@@ -1,7 +1,11 @@
 <script setup></script>
 
 <template>
-	<p>Hello world</p>
+	<header></header>
+	<main>
+		<router-view />
+	</main>
+	<aside></aside>
 </template>
 
-<style lang="scss"></style>
+<style scoped lang="scss"></style>
