@@ -43,9 +43,13 @@ h5,
 h6 {
 	overflow-wrap: break-word;
 }
+:root {
+	--font-color: #2f3542;
+}
 
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
+	color: var(--font-color);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	isolation: isolate;
