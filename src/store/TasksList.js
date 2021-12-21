@@ -5,8 +5,8 @@ export const useTaskStore = defineStore('task', {
 		tasksList: new Set(),
 	}),
 	actions: {
-		addTask(task) {
-			this.tasksList.add(task);
+		async addTask(task) {
+			await this.tasksList.add(task);
 		},
 	},
 });

@@ -1,22 +1,53 @@
 <script setup>
-	import { defineProps } from 'vue';
+	import { defineProps, ref } from 'vue';
+	import { useTaskStore } from '../store/TasksList';
+	import { useAppStore } from '../store/AppStore';
 
-	defineProps({
+	const { addTask } = useTaskStore();
+	const { wantAddTask } = useAppStore();
+
+	const props = defineProps({
 		nameTask: {
 			type: String,
 			required: true,
 		},
+		delay: {
+			type: Date,
+		},
+		status: {
+			type: String,
+			default: 'À faire',
+		},
 	});
+
+	defineEmits(['update:nameTask']);
+
+	function addNewTask() {
+		addTask({
+			name: props.nameTask,
+			delay: props.delay,
+			status: props.status,
+		})
+			.then(() => {
+				wantAddTask();
+			})
+			.catch((error) => console.log(error));
+	}
 </script>
 <template>
-	<form @submit.prevent="" class="flex">
+	<form @submit.prevent="addNewTask" class="flex">
 		<div class="flex">
 			<label for="name">Nom <span>*</span></label>
-			<input id="name" placeholder="Acheter des bananes" :value="nameTask" />
+			<input
+				id="name"
+				placeholder="Acheter des bananes"
+				@input="$emit('update:nameTask', $event.target.value)"
+				:value="nameTask"
+			/>
 		</div>
 		<div class="flex">
 			<label for="delay">Délais</label>
-			<input id="delay" type="date" />
+			<input id="delay" type="date" v-model="delay" />
 		</div>
 		<input class="addTask" type="submit" value="Ajouter" />
 	</form>

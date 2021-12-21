@@ -1,7 +1,6 @@
 <script setup>
 	import Menu from './components/Menu.vue';
 	import { useAppStore } from './store/AppStore';
-	import { useTaskStore } from './store/TasksList';
 	import Task from './components/Task.vue';
 	import { ref } from 'vue';
 
@@ -19,16 +18,11 @@
 	const date = currentDate.toLocaleDateString('fr-FR', options);
 
 	const storeApp = useAppStore();
-	const { addTask } = useTaskStore();
 
 	let nameTask = ref('');
 
-	function addTasks() {
-		addTask({ name: 'Acheter du café', deadline: Date.now(), status: 'À faire' });
-	}
-
-	function displayMenu() {
-		storeApp.switchMenu();
+	function updateNameValue(payload) {
+		nameTask.value += payload.data;
 	}
 </script>
 
@@ -38,7 +32,7 @@
 	</transition>
 	<main>
 		<header class="topMain">
-			<div @click.prevent="displayMenu" class="hamburger">
+			<div @click.prevent="storeApp.switchMenu()" class="hamburger">
 				<svg><use href="/img/sprite.svg#menu"></use></svg>
 			</div>
 			<div class="titleBlock">
@@ -52,7 +46,7 @@
 				</label>
 			</form>
 		</header>
-		<Task v-if="storeApp.addTaskIsActive" :name-task="nameTask" />
+		<Task v-if="storeApp.addTaskIsActive" :nameTask="nameTask" @input="updateNameValue" />
 		<router-view />
 	</main>
 </template>

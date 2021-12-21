@@ -4,24 +4,6 @@
 
 	const store = useTaskStore();
 	const { tasksList } = storeToRefs(store);
-
-	// const listTasks = reactive([
-	// 	{
-	// 		name: 'Acheter du café',
-	// 		deadline: Date.now(),
-	// 		status: 'À faire',
-	// 	},
-	// 	{
-	// 		name: 'Manger le chat',
-	// 		deadline: Date.now(),
-	// 		status: 'En cours',
-	// 	},
-	// 	{
-	// 		name: 'Cuire le petit chat',
-	// 		deadline: Date.now(),
-	// 		status: 'Finis',
-	// 	},
-	// ]);
 	//aller chercher si il y a des tâches dans une base de données fictive (JSON)
 	//afficher la liste des tâches si il y en a
 	//sinon afficher qu'on a déjà fait toutes les tâches
@@ -40,7 +22,7 @@
 			<input class="task__input" type="checkbox" />
 			<h3 class="task__name">{{ task.name }}</h3>
 		</div>
-		<p class="task__date">{{ task.deadline }}</p>
+		<p class="task__date">{{ task.delay }}</p>
 		<p class="task__status" @click.prevent="changeStatus">{{ task.status }}</p>
 		<div class="task__svg flex">
 			<svg @click.prevent="editTask"><use href="/img/sprite.svg#edit"></use></svg>
@@ -92,13 +74,11 @@
 				transform: scale(1.1);
 			}
 		}
-
-		&__input {
-			margin-right: 1em;
-		}
 		&__name {
+			padding: 1em;
 			font-size: 1em;
 			font-weight: normal;
+			max-width: 100%;
 		}
 
 		&__date,
