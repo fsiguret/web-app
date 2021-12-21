@@ -1,6 +1,9 @@
 <script setup>
 	import Menu from './components/Menu.vue';
 	import { useAppStore } from './store/AppStore';
+	import { useTaskStore } from './store/TasksList';
+	import Task from './components/Task.vue';
+	import { ref } from 'vue';
 
 	const currentDate = new Date(Date.now());
 	const options = {
@@ -15,21 +18,23 @@
 
 	const date = currentDate.toLocaleDateString('fr-FR', options);
 
-	const store = useAppStore();
+	const storeApp = useAppStore();
+	const { addTask } = useTaskStore();
 
-	function displayMenu() {
-		store.switchMenu();
-		console.log(store.menuIsActive);
+	let nameTask = ref('');
+
+	function addTasks() {
+		addTask({ name: 'Acheter du café', deadline: Date.now(), status: 'À faire' });
 	}
 
-	function addTask() {
-		console.log('lol');
+	function displayMenu() {
+		storeApp.switchMenu();
 	}
 </script>
 
 <template>
 	<transition name="slide">
-		<Menu v-if="store.menuIsActive" />
+		<Menu v-if="storeApp.menuIsActive" />
 	</transition>
 	<main>
 		<header class="topMain">
@@ -40,13 +45,14 @@
 				<h1 class="titleBlock__title">Ma Liste</h1>
 				<p class="titleBlock__date">{{ date }}</p>
 			</div>
-			<form class="form" @submit.prevent="addTask">
-				<input class="form__input" type="text" placeholder="Ajouter une tâche" />
+			<form class="form" @submit.prevent="storeApp.wantAddTask()">
+				<input class="form__input" type="text" placeholder="Ajouter une tâche" v-model="nameTask" />
 				<label class="form__label">
 					<svg><use href="/img/sprite.svg#plus"></use></svg>
 				</label>
 			</form>
 		</header>
+		<Task v-if="storeApp.addTaskIsActive" :name-task="nameTask" />
 		<router-view />
 	</main>
 </template>

@@ -1,24 +1,27 @@
 <script setup>
-	import { reactive } from 'vue';
+	import { useTaskStore } from '../store/TasksList';
+	import { storeToRefs } from 'pinia';
 
-	const hasTask = false;
-	const listTasks = reactive([
-		{
-			name: 'Acheter du café',
-			deadline: Date.now(),
-			status: 'À faire',
-		},
-		{
-			name: 'Manger le chat',
-			deadline: Date.now(),
-			status: 'En cours',
-		},
-		{
-			name: 'Cuire le petit chat',
-			deadline: Date.now(),
-			status: 'Finis',
-		},
-	]);
+	const store = useTaskStore();
+	const { tasksList } = storeToRefs(store);
+
+	// const listTasks = reactive([
+	// 	{
+	// 		name: 'Acheter du café',
+	// 		deadline: Date.now(),
+	// 		status: 'À faire',
+	// 	},
+	// 	{
+	// 		name: 'Manger le chat',
+	// 		deadline: Date.now(),
+	// 		status: 'En cours',
+	// 	},
+	// 	{
+	// 		name: 'Cuire le petit chat',
+	// 		deadline: Date.now(),
+	// 		status: 'Finis',
+	// 	},
+	// ]);
 	//aller chercher si il y a des tâches dans une base de données fictive (JSON)
 	//afficher la liste des tâches si il y en a
 	//sinon afficher qu'on a déjà fait toutes les tâches
@@ -28,11 +31,11 @@
 	function removeTask() {}
 </script>
 <template>
-	<section v-if="!hasTask" class="tasksDone flex">
+	<section v-if="tasksList.size <= 0 || undefined" class="tasksDone flex">
 		<svg><use href="/img/sprite.svg#check"></use></svg>
 		<h2 class="tasksDone__title"><span>Bravo, </span>vous n'avez plus de tâches !</h2>
 	</section>
-	<article class="task flex" v-else v-for="task in listTasks" :key="task">
+	<article class="task flex" v-else v-for="task in tasksList" :key="task">
 		<div class="flex">
 			<input class="task__input" type="checkbox" />
 			<h3 class="task__name">{{ task.name }}</h3>

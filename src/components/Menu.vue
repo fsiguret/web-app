@@ -9,7 +9,6 @@
 
 	function removeMenu() {
 		store.switchMenu();
-		console.log(store.menuIsActive);
 	}
 </script>
 
