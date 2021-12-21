@@ -43,11 +43,26 @@ h5,
 h6 {
 	overflow-wrap: break-word;
 }
+
+.flex {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
 :root {
 	--font-color: #2f3542;
+	--body-color: #ececec;
+	--secondary-background: #ffffff;
+	--secondary-color: #52a1ff;
+	--error-color: #ff4757;
+	--validation-color: #70a1ff;
+	--pendind-color: #ffa502;
+	--todo-color: #ff4757;
+	--done-colo: #2ed573;
 }
 
-#app {
+body {
+	background: var(--body-color);
 	font-family: 'Roboto', sans-serif;
 	color: var(--font-color);
 	-webkit-font-smoothing: antialiased;

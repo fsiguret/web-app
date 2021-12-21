@@ -1,4 +1,7 @@
 <script setup>
+	import Menu from './components/Menu.vue';
+	import { useAppStore } from './store/AppStore';
+
 	const currentDate = new Date(Date.now());
 	const options = {
 		weekday: 'long',
@@ -12,47 +15,63 @@
 
 	const date = currentDate.toLocaleDateString('fr-FR', options);
 
-	function displayMenu(event) {}
+	const store = useAppStore();
+
+	function displayMenu() {
+		store.switchMenu();
+		console.log(store.menuIsActive);
+	}
+
 	function addTask() {
 		console.log('lol');
 	}
 </script>
 
 <template>
-	<header>
-		<div @click="displayMenu" class="hamburger">
-			<div class="hamburger__line"></div>
-			<div class="hamburger__line"></div>
-			<div class="hamburger__line"></div>
-		</div>
-		<div class="titleBlock">
-			<h1 class="titleBlock__title">Ma Liste</h1>
-			<p class="titleBlock__date">{{ date }}</p>
-		</div>
-		<form class="form" @submit.prevent="addTask">
-			<input class="form__input" type="text" placeholder="Ajouter une tâche" />
-			<span></span>
-		</form>
-	</header>
+	<transition name="slide">
+		<Menu v-if="store.menuIsActive" />
+	</transition>
 	<main>
+		<header class="topMain">
+			<div @click.prevent="displayMenu" class="hamburger">
+				<svg><use href="/img/sprite.svg#menu"></use></svg>
+			</div>
+			<div class="titleBlock">
+				<h1 class="titleBlock__title">Ma Liste</h1>
+				<p class="titleBlock__date">{{ date }}</p>
+			</div>
+			<form class="form" @submit.prevent="addTask">
+				<input class="form__input" type="text" placeholder="Ajouter une tâche" />
+				<label class="form__label">
+					<svg><use href="/img/sprite.svg#plus"></use></svg>
+				</label>
+			</form>
+		</header>
 		<router-view />
 	</main>
 </template>
 
 <style scoped lang="scss">
-	header {
+	.slide-enter-active,
+	.slide-leave-active {
+		transition: transform 0.5s ease;
+	}
+	.slide-enter-from,
+	.slide-leave-to {
+		transform: translateX(-1000px);
+	}
+	.topMain {
+		background: url('https://picsum.photos/1080/500');
 		display: flex;
 		flex-direction: column;
+		padding-bottom: 1em;
 		.hamburger {
 			cursor: pointer;
 			margin: 2em auto 2em 2em;
-			&__line {
-				width: 1.5rem;
-				height: 4px;
-				background-color: black;
-				&:not(:last-child) {
-					margin-bottom: 3px;
-				}
+
+			svg {
+				width: 24px;
+				height: 24px;
 			}
 		}
 		.titleBlock {
@@ -73,6 +92,16 @@
 			&__input {
 				width: 100%;
 				padding: 0.7em;
+			}
+			&__label {
+				position: absolute;
+				top: 25%;
+				right: 1em;
+				cursor: pointer;
+				svg {
+					width: 24px;
+					height: 24px;
+				}
 			}
 		}
 	}

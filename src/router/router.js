@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 export default createRouter({
 	routes: [
 		{
-			path: '/',
+			path: '/task',
 			component: () => import('../pages/TasksListView.vue'),
 		},
 	],
