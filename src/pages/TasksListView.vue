@@ -1,21 +1,28 @@
 <script setup>
 	import { useTaskStore } from '../store/TasksList';
+	import { useAppStore } from '../store/AppStore';
 	import { storeToRefs } from 'pinia';
 
 	const store = useTaskStore();
+	const { wantAddTask } = useAppStore();
 	const { tasksList } = storeToRefs(store);
 	//aller chercher si il y a des tâches dans une base de données fictive (JSON)
 	//afficher la liste des tâches si il y en a
 	//sinon afficher qu'on a déjà fait toutes les tâches
 
 	function changeStatus() {}
-	function editTask() {}
-	function removeTask() {}
+	function editTask(task) {
+		wantAddTask();
+	}
+	function removeTask(task) {
+		useTaskStore().removeTask(task);
+	}
 </script>
 <template>
 	<section v-if="tasksList.size <= 0 || undefined" class="tasksDone flex">
 		<svg><use href="/img/sprite.svg#check"></use></svg>
 		<h2 class="tasksDone__title"><span>Bravo, </span>vous n'avez plus de tâches !</h2>
+		<button class="tasksDone__addTask" @click.prevent="wantAddTask()">Ajouter une nouvelle tâche</button>
 	</section>
 	<article class="task flex" v-else v-for="task in tasksList" :key="task">
 		<div class="flex">
@@ -25,8 +32,8 @@
 		<p class="task__date">{{ task.delay }}</p>
 		<p class="task__status" @click.prevent="changeStatus">{{ task.status }}</p>
 		<div class="task__svg flex">
-			<svg @click.prevent="editTask"><use href="/img/sprite.svg#edit"></use></svg>
-			<svg @click.prevent="removeTask"><use href="/img/sprite.svg#trashcan"></use></svg>
+			<svg @click.prevent="editTask(task)"><use href="/img/sprite.svg#edit"></use></svg>
+			<svg @click.prevent="removeTask(task)"><use href="/img/sprite.svg#trashcan"></use></svg>
 		</div>
 	</article>
 </template>
@@ -45,6 +52,19 @@
 			text-align: center;
 			display: block;
 			width: 100%;
+		}
+		&__addTask {
+			cursor: pointer;
+			background: var(--validation-color);
+			border: none;
+			color: white;
+			padding: 0.5em 1.7em;
+			margin: 3em auto;
+			transform: scale(1);
+			transition: transform 0.2s linear;
+			&:hover {
+				transform: scale(1.1);
+			}
 		}
 	}
 	.task {

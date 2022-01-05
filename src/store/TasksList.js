@@ -8,5 +8,8 @@ export const useTaskStore = defineStore('task', {
 		async addTask(task) {
 			await this.tasksList.add(task);
 		},
+		removeTask(task) {
+			this.tasksList.delete(task);
+		},
 	},
 });

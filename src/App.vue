@@ -20,10 +20,6 @@
 	const storeApp = useAppStore();
 
 	let nameTask = ref('');
-
-	function updateNameValue(payload) {
-		nameTask.value += payload.data;
-	}
 </script>
 
 <template>
@@ -39,14 +35,11 @@
 				<h1 class="titleBlock__title">Ma Liste</h1>
 				<p class="titleBlock__date">{{ date }}</p>
 			</div>
-			<form class="form" @submit.prevent="storeApp.wantAddTask()">
-				<input class="form__input" type="text" placeholder="Ajouter une tâche" v-model="nameTask" />
-				<label class="form__label">
-					<svg><use href="/img/sprite.svg#plus"></use></svg>
-				</label>
-			</form>
+			<button class="addTask flex" @click.prevent="storeApp.wantAddTask()">
+				Ajouter une nouvelle tâche <svg><use href="/img/sprite.svg#plus"></use></svg>
+			</button>
 		</header>
-		<Task v-if="storeApp.addTaskIsActive" :nameTask="nameTask" @input="updateNameValue" />
+		<Task v-if="storeApp.addTaskIsActive" :nameTask="nameTask" />
 		<router-view />
 	</main>
 </template>
@@ -86,22 +79,23 @@
 				font-size: 0.9em;
 			}
 		}
-		.form {
-			margin: 0 1.5em 0 1.5em;
-			position: relative;
-			&__input {
-				width: 100%;
-				padding: 0.7em;
+		.addTask {
+			justify-content: space-between;
+			cursor: pointer;
+			background: var(--validation-color);
+			border: none;
+			width: 60%;
+			color: white;
+			padding: 0.5em 1.7em;
+			margin: 1em auto;
+			transform: scale(1);
+			transition: transform 0.2s linear;
+			svg {
+				width: 24px;
+				height: 24px;
 			}
-			&__label {
-				position: absolute;
-				top: 25%;
-				right: 1em;
-				cursor: pointer;
-				svg {
-					width: 24px;
-					height: 24px;
-				}
+			&:hover {
+				transform: scale(1.1);
 			}
 		}
 	}
