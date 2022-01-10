@@ -1,8 +1,9 @@
 <script setup>
 	import Menu from './components/Menu.vue';
 	import { useAppStore } from './store/AppStore';
-	import Task from './components/Task.vue';
+	import Task from './components/AddTaskForm.vue';
 	import { ref } from 'vue';
+	import BaseButton from './components/BaseButton.vue';
 
 	const currentDate = new Date(Date.now());
 	const options = {
@@ -35,11 +36,11 @@
 				<h1 class="titleBlock__title">Ma Liste</h1>
 				<p class="titleBlock__date">{{ date }}</p>
 			</div>
-			<button class="addTask flex" @click.prevent="storeApp.wantAddTask()">
-				Ajouter une nouvelle tâche <svg><use href="/img/sprite.svg#plus"></use></svg>
-			</button>
+			<base-button class="addTask flex" value="Ajouter une nouvelle tâche" @click.prevent="storeApp.wantAddTask()">
+				<svg><use href="/img/sprite.svg#plus"></use></svg>
+			</base-button>
 		</header>
-		<Task v-if="storeApp.addTaskIsActive" :nameTask="nameTask" />
+		<task v-if="storeApp.addTaskIsActive" :nameTask="nameTask" />
 		<router-view />
 	</main>
 </template>
@@ -81,21 +82,9 @@
 		}
 		.addTask {
 			justify-content: space-between;
-			cursor: pointer;
-			background: var(--validation-color);
-			border: none;
-			width: 60%;
-			color: white;
-			padding: 0.5em 1.7em;
-			margin: 1em auto;
-			transform: scale(1);
-			transition: transform 0.2s linear;
 			svg {
 				width: 24px;
 				height: 24px;
-			}
-			&:hover {
-				transform: scale(1.1);
 			}
 		}
 	}

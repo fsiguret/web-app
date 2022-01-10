@@ -4,6 +4,7 @@ export const useAppStore = defineStore('application', {
 	state: () => ({
 		menuIsActive: false,
 		addTaskIsActive: false,
+		editTaskIsActive: false,
 	}),
 	actions: {
 		switchMenu() {
@@ -11,6 +12,9 @@ export const useAppStore = defineStore('application', {
 		},
 		wantAddTask() {
 			this.addTaskIsActive = !this.addTaskIsActive;
+		},
+		wantEditTask() {
+			this.editTaskIsActive = !this.editTaskIsActive;
 		},
 	},
 });

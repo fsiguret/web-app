@@ -2,40 +2,33 @@
 	import { useTaskStore } from '../store/TasksList';
 	import { useAppStore } from '../store/AppStore';
 	import { storeToRefs } from 'pinia';
+	import BaseButton from '../components/BaseButton.vue';
+	import Task from '../components/Task.vue';
 
 	const store = useTaskStore();
 	const { wantAddTask } = useAppStore();
-	const { tasksList } = storeToRefs(store);
-	//aller chercher si il y a des tâches dans une base de données fictive (JSON)
-	//afficher la liste des tâches si il y en a
-	//sinon afficher qu'on a déjà fait toutes les tâches
+	const { confirmRemoveTask, removeTask } = useTaskStore();
+	const { tasksList, isConfirmRemoveTask, currentTask } = storeToRefs(store);
 
-	function changeStatus() {}
-	function editTask(task) {
-		wantAddTask();
-	}
-	function removeTask(task) {
-		useTaskStore().removeTask(task);
+	function removeCurrentTask(task) {
+		removeTask(task);
+		confirmRemoveTask();
 	}
 </script>
 <template>
-	<section v-if="tasksList.size <= 0 || undefined" class="tasksDone flex">
-		<svg><use href="/img/sprite.svg#check"></use></svg>
+	<section v-if="tasksList.length <= 0 || undefined" class="tasksDone flex">
+		<svg class="tasksDone__svg"><use href="/img/sprite.svg#check"></use></svg>
 		<h2 class="tasksDone__title"><span>Bravo, </span>vous n'avez plus de tâches !</h2>
-		<button class="tasksDone__addTask" @click.prevent="wantAddTask()">Ajouter une nouvelle tâche</button>
+		<base-button value="Ajouter une nouvelle tâche" @click.prevent="wantAddTask()" />
 	</section>
-	<article class="task flex" v-else v-for="task in tasksList" :key="task">
-		<div class="flex">
-			<input class="task__input" type="checkbox" />
-			<h3 class="task__name">{{ task.name }}</h3>
+	<task v-for="task in tasksList" :key="task" :task="task" />
+	<section class="confirmRemove" v-if="isConfirmRemoveTask">
+		<h2 class="confirmRemove__tittle">Voulez vous vraiment supprimer la tâche "{{ currentTask.name }}" ?</h2>
+		<div class="confirmRemove__buttons flex">
+			<base-button class="accept" value="Oui" @click.prevent="removeCurrentTask(currentTask)" />
+			<base-button class="refuse" value="Non" @click.prevent="confirmRemoveTask" />
 		</div>
-		<p class="task__date">{{ task.delay }}</p>
-		<p class="task__status" @click.prevent="changeStatus">{{ task.status }}</p>
-		<div class="task__svg flex">
-			<svg @click.prevent="editTask(task)"><use href="/img/sprite.svg#edit"></use></svg>
-			<svg @click.prevent="removeTask(task)"><use href="/img/sprite.svg#trashcan"></use></svg>
-		</div>
-	</article>
+	</section>
 </template>
 
 <style scoped lang="scss">
@@ -43,7 +36,7 @@
 		flex-direction: column;
 		padding: 8em;
 		color: var(--secondary-color);
-		svg {
+		&__svg {
 			width: 100px;
 			height: 100px;
 			margin-bottom: 2em;
@@ -67,50 +60,34 @@
 			}
 		}
 	}
-	.task {
-		margin: 1em;
-		padding: 1em;
+
+	.confirmRemove {
+		position: absolute;
 		background: var(--secondary-background);
-		& > * {
-			width: 25%;
+		z-index: 1;
+		top: 25%;
+		left: 0;
+		right: 0;
+		flex-direction: column;
+		width: 35%;
+		background: white;
+		padding: 2em 1.5em 1em 1.5em;
+		margin: 5em auto;
+		box-shadow: 6px 0 14px 2px rgba(0, 0, 0, 0.21);
+		&__tittle {
+			font-size: 1.2em;
+			text-align: center;
+			margin-bottom: 1em;
 		}
-		& :not(:first-child) {
-			justify-content: end;
-		}
-
-		svg {
-			width: 24px;
-			height: 24px;
-			cursor: pointer;
-			transition: transform 0.1s linear;
-			&:first-child {
-				color: var(--secondary-color);
-				margin-right: 1em;
+		&__buttons {
+			flex-direction: column;
+			justify-content: center;
+			> .accept {
+				background: var(--error-color);
+				margin: 0.5em auto;
 			}
-			&:last-child {
-				color: var(--error-color);
-			}
-			&:hover {
-				transform: scale(1.1);
-			}
-		}
-		&__name {
-			padding: 1em;
-			font-size: 1em;
-			font-weight: normal;
-			max-width: 100%;
-		}
-
-		&__date,
-		&__status {
-			text-align: end;
-		}
-
-		&__status {
-			cursor: pointer;
-			transition: transform 0.1s linear;
-			&:hover {
-				transform: scale(1.01);
+			> .refuse {
+				margin: 0.5em auto;
 			}
 		}
 	}
