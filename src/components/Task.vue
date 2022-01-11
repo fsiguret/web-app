@@ -64,6 +64,7 @@
 		padding: 1em;
 		background: var(--secondary-background);
 		justify-content: space-between;
+
 		&__form {
 			width: 50%;
 			&-input {
@@ -145,10 +146,10 @@
 				padding: 1em;
 				font-size: 1em;
 				font-weight: normal;
-				width: 30%;
+				width: 50%;
 			}
 			.date {
-				width: 30%;
+				width: 50%;
 			}
 		}
 		.task__svg {

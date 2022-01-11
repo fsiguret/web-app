@@ -17,7 +17,6 @@ export const useTaskStore = defineStore('task', {
 		editTask(task) {
 			this.removeTask(task);
 			this.addTask(task);
-			console.log(toRaw(this.tasksList));
 		},
 		confirmRemoveTask() {
 			this.isConfirmRemoveTask = !this.isConfirmRemoveTask;
